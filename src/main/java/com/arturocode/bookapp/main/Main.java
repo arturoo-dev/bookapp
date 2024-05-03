@@ -5,10 +5,7 @@ import com.arturocode.bookapp.model.BooksData;
 import com.arturocode.bookapp.service.ConvertData;
 import com.arturocode.bookapp.service.RequestAPI;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -80,11 +77,17 @@ public class Main {
         } else {
             System.out.println("Libro encontrado");
             System.out.println(foundBook.get());
-            ;
         }
     }
 
     public void statistics() {
-
+        DoubleSummaryStatistics statistics = dataBooks.books().stream()
+                .filter(e -> e.download_count() > 0)
+                .collect(Collectors.summarizingDouble(BooksData::download_count));
+        System.out.println("Promedio de descargas: " + statistics.getAverage());
+        System.out.println("Maximo de descargas: " + statistics.getMax());
+        System.out.println("Minimo de descargas: " + statistics.getMin());
+        System.out.println("Suma de descargas: " + statistics.getSum());
+        System.out.println("Total de libros: " + dataBooks.books().size());
     }
 }
