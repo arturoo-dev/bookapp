@@ -1,5 +1,6 @@
 package com.arturocode.bookapp;
 
+import com.arturocode.bookapp.main.Main;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +14,7 @@ public class BookappApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        Main main = new Main();
+        main.showMenu();
     }
 }

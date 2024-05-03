@@ -3,8 +3,10 @@ package com.arturocode.bookapp.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 public class ConvertData implements IConvertData {
     private final ObjectMapper objectMapper = new ObjectMapper();
+
 
     @Override
     public <T> T convertData(String json, Class<T> tClass) {
@@ -14,4 +16,5 @@ public class ConvertData implements IConvertData {
             throw new RuntimeException(e);
         }
     }
+
 }
