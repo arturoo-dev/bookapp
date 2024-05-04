@@ -16,7 +16,7 @@ public class Main {
     private final ConvertData convertData = new ConvertData();
     private final String jsonRequest = requestAPI.requestData(URL_BASE);
     private final Books dataBooks = convertData.convertData(jsonRequest, Books.class);
-    Scanner input = new Scanner(System.in);
+    private final Scanner input = new Scanner(System.in);
     int option = 0;
 
     public void showMenu() {
@@ -66,17 +66,33 @@ public class Main {
 
     public void searchBook() {
         System.out.print("Ingrese el nombre del libro: ");
+        int i = 1;
         var title = input.next();
         var jsonRequest = requestAPI.requestData(URL_BASE + "?search=" + title.replace(" ", "+"));
         var searchResult = convertData.convertData(jsonRequest, Books.class);
-        Optional<BooksData> foundBook = searchResult.books().stream()
+
+        List<BooksData> foundBook = searchResult.books().stream()
                 .filter(l -> l.title().toUpperCase().contains(title.toUpperCase()))
-                .findFirst();
+                .toList();
+        /* List<BooksData> foundBook = new ArrayList<>();
+        for (BooksData l : searchResult.books()) {
+            if (l.title().toUpperCase().contains(title.toUpperCase())) {
+                foundBook.add(l);
+            }
+        }*/
         if (foundBook.isEmpty()) {
             System.out.println("Libro no encontrado");
         } else {
-            System.out.println("Libro encontrado");
-            System.out.println(foundBook.get());
+            System.out.println("Libros encontrados");
+            for (BooksData booksData : foundBook) {
+                System.out.println("==============================================");
+                System.out.println("Libro  numero: " + i++);
+                System.out.println("Titulo: " + booksData.title());
+                System.out.println("Autores: " + booksData.authors());
+                System.out.println("Idiomas: " + booksData.languages());
+                System.out.println("Cantidad de descargas:" + booksData.download_count());
+
+            }
         }
     }
 
@@ -84,6 +100,7 @@ public class Main {
         DoubleSummaryStatistics statistics = dataBooks.books().stream()
                 .filter(e -> e.download_count() > 0)
                 .collect(Collectors.summarizingDouble(BooksData::download_count));
+
         System.out.println("Promedio de descargas: " + statistics.getAverage());
         System.out.println("Maximo de descargas: " + statistics.getMax());
         System.out.println("Minimo de descargas: " + statistics.getMin());
